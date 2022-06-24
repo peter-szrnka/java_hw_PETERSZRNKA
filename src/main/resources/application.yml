@@ -13,3 +13,7 @@ spring:
 logging:
   level:
     com.ndvr: INFO
+
+config:
+  scenario:
+    generate.limit: 1000
