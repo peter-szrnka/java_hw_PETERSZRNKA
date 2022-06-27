@@ -22,7 +22,7 @@ class MonthOverMonthConverterImplTest {
 	private MonthOverMonthConverter converter = new MonthOverMonthConverterImpl();
 	
 	@Test
-	void test() {
+	void shouldReturnWith2PriceChanges() {
 		// act
 		List<BigDecimal> response = converter.toPriceChangesList(TestDataGenerator.generateFixTestInput());
 		

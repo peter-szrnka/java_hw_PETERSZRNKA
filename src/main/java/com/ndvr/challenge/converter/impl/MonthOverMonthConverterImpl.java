@@ -3,9 +3,9 @@ package com.ndvr.challenge.converter.impl;
 import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.springframework.stereotype.Component;
 
@@ -19,7 +19,7 @@ public class MonthOverMonthConverterImpl implements MonthOverMonthConverter {
 
 	@Override
 	public List<BigDecimal> toPriceChangesList(List<Pricing> pricingHistoryData) {
-		Map<String, List<BigDecimal>> datePriceMapping = new HashMap<>();
+		Map<String, List<BigDecimal>> datePriceMapping = new TreeMap<>();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT_Y_M);
 		
 		for (Pricing pricing : pricingHistoryData) {
