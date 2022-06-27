@@ -48,5 +48,6 @@ class ScenarioSelectorServiceImplTest {
 		assertNotNull(response);
 		assertTrue(logAppender.list.stream().anyMatch(log -> log.getFormattedMessage().startsWith("Lowest closing price: ")));
 		assertTrue(logAppender.list.stream().anyMatch(log -> log.getFormattedMessage().startsWith("Highest closing price: ")));
+		assertTrue(logAppender.list.stream().anyMatch(log -> log.getFormattedMessage().startsWith("Median of all projected price change scenarios: ")));
 	}
 }

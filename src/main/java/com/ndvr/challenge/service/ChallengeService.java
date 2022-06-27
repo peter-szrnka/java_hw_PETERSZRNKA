@@ -1,14 +1,12 @@
 package com.ndvr.challenge.service;
 
 import java.math.BigDecimal;
-import java.security.SecureRandom;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import org.springframework.stereotype.Service;
 
+import com.ndvr.challenge.converter.MonthOverMonthConverter;
 import com.ndvr.challenge.dataprovider.YahooFinanceClient;
 import com.ndvr.challenge.model.Pricing;
 import com.ndvr.challenge.model.Scenario;
@@ -26,6 +24,7 @@ public class ChallengeService {
 	private final YahooFinanceClient dataProvider;
     private final ScenarioGeneratorService scenarioGeneratorService;
     private final ScenarioSelectorService scenarioSelectorService;
+    private final MonthOverMonthConverter monthOverMonthConverter;
 
     public List<Pricing> getHistoricalAssetData(String symbol, LocalDate fromDate, LocalDate toDate) {
         log.info("Fetching historical price data for {}", symbol);
@@ -49,20 +48,9 @@ public class ChallengeService {
         return bestScenario.getPriceChanges();
     }
 
-    /**
-     * TODO This is under clarification. Refactor this method to query historical data from the getHistoricalAssetData() method.
-     */
 	private List<BigDecimal> getPriceChanges(String symbol, Integer numberOfMonths) {
-        //Double result = getHistoricalAssetData(symbol, LocalDate.now().minusMonths(numberOfMonths), LocalDate.now())
-        //.stream().map(pricing -> pricing.getClosePrice()).collect(Collectors.averagingDouble(BigDecimal::doubleValue));
-		List<BigDecimal> resultList = new ArrayList<>();
-		
-		Random r = new SecureRandom();
-		// Generate random data for the last 5 years if every month contains only 20 input data.
-		for (int i=0; i < 20 * 12 * 5; i++) {
-			resultList.add(BigDecimal.valueOf(r.nextDouble(0, 100)));
-		}
-		
-		return resultList;
+		List<Pricing> historicalAssetData = getHistoricalAssetData(symbol, LocalDate.now().minusMonths(numberOfMonths), LocalDate.now());
+		log.info("Got {} items of historical asset data to process", historicalAssetData.size());
+		return monthOverMonthConverter.toPriceChangesList(historicalAssetData);
 	}
 }

@@ -1,7 +1,11 @@
 package com.ndvr.challenge.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,6 +26,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
 
 import com.ndvr.challenge.dataprovider.YahooFinanceClient;
+import com.ndvr.challenge.util.TestDataGenerator;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -44,6 +49,7 @@ class GetProjectedAssetDataIntegrationTest {
 	void shouldReturnProjectedAssetDataWithoutSettingNumberOfMonths() {
 		// arrange
 		HttpEntity<Void> requestEntity = new HttpEntity<>(getApiHttpHeaders());
+		when(dataProvider.fetchPriceData(anyString(), any(LocalDate.class), any(LocalDate.class))).thenReturn(TestDataGenerator.generateRandomTestInput());
 		
 		// act
 		ResponseEntity<List> response = restTemplate.exchange(BASE_URL + port + URL_POSTFIX, HttpMethod.GET, requestEntity, List.class);
@@ -57,6 +63,7 @@ class GetProjectedAssetDataIntegrationTest {
 	@SuppressWarnings({ "rawtypes" }) // This can be removed if we use a wrapper class instead of returning collections.
 	void shouldReturnProjectedAssetData() {
 		// arrange
+		when(dataProvider.fetchPriceData(anyString(), any(LocalDate.class), any(LocalDate.class))).thenReturn(TestDataGenerator.generateFixTestInput());
 
 		// act
 		ResponseEntity<List> response = restTemplate.getForEntity(BASE_URL + port + URL_POSTFIX + "?numberOfMonths=10", List.class);
