@@ -3,6 +3,7 @@ package com.ndvr.challenge.service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -32,7 +33,7 @@ public class ChallengeService {
     }
     
     public List<BigDecimal> getProjectedAssetData(String symbol, Integer numberOfMonths) {
-    	Integer nrOfMonths = (numberOfMonths == null) ? DEFAULT_NUMBER_OF_MONTHS : numberOfMonths;
+    	Integer nrOfMonths = Optional.ofNullable(numberOfMonths).orElse(DEFAULT_NUMBER_OF_MONTHS);
         log.info("Generating {} months of projected price data for {}", nrOfMonths, symbol);
 
         // a.Extract historical price movements: Calculate a list of month-over-month price changes from the available historical data
